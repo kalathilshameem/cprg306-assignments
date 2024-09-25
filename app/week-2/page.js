@@ -1,4 +1,3 @@
-// app/week-2/page.js
 import StudentInfo from './student-info'; // Import the StudentInfo component
 
 export default function Page() {
