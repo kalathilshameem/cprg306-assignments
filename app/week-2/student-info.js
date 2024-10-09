@@ -1,12 +1,22 @@
-import Link from "next/link"; // Import Link from Next.js
+import React from 'react';
 
-export default function StudentInfo() {
+const StudentInfo = () => {
+  const yourName = 'Muhammed Shameem Kalathil';
+  const githubRepositoryLink = 'https://github.com/kalathilshameem/cprg306-assignments';
+
   return (
     <div>
-      <h2>Your Name: Muhammed Shameem Kalathil</h2>
-      <Link href="https://github.com/kalathilshameem/cprg306-assignments">
-        My GitHub Repository {/* Link text directly inside the Link component */}
-      </Link>
+      <h2>Your Name</h2>
+      <p>{yourName}</p>
+
+      <h2>GitHub Repository</h2>
+      <p>
+        <a href={githubRepositoryLink} target="_blank" rel="noopener noreferrer">
+          {githubRepositoryLink}
+        </a>
+      </p>
     </div>
   );
-}
+};
+
+
