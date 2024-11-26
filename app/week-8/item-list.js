@@ -3,22 +3,24 @@
 import React, { useState } from 'react';
 import Item from './item';
 
-export default function ItemList({ items, onItemSelect }) {
+export default function ItemList({ items = [], onItemSelect }) {
+    console.log('Items:', items); // Check the structure of the data passed in
     const [sortBy, setSortBy] = useState('name');
     const [groupByCategory, setGroupByCategory] = useState(false);
 
-    const sortedItems = [...items].sort((a, b) => {
-        if (sortBy === 'name') return a.name.localeCompare(b.name);
-        if (sortBy === 'category') return a.category.localeCompare(b.category);
+    // Check if items are an array and have proper properties
+    const sortedItems = Array.isArray(items) ? [...items].sort((a, b) => {
+        if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
+        if (sortBy === 'category') return (a.category || '').localeCompare(b.category || '');
         return 0;
-    });
+    }) : [];
 
     const groupedItems = groupByCategory
-        ? sortedItems.reduce((grouped, item) => {
+        ? (Array.isArray(items) ? items.reduce((grouped, item) => {
             if (!grouped[item.category]) grouped[item.category] = [];
             grouped[item.category].push(item);
             return grouped;
-        }, {})
+        }, {}) : {})
         : null;
 
     const handleSort = (sortType) => {
@@ -45,6 +47,8 @@ export default function ItemList({ items, onItemSelect }) {
                     Grouped Category
                 </button>
             </div>
+
+            {/* Render grouped items or regular sorted items */}
             {groupByCategory ? (
                 Object.keys(groupedItems).sort().map((category) => (
                     <div key={category}>
@@ -58,9 +62,13 @@ export default function ItemList({ items, onItemSelect }) {
                 ))
             ) : (
                 <ul className="space-y-4">
-                    {sortedItems.map((item) => (
-                        <Item key={item.id} {...item} onSelect={onItemSelect} />
-                    ))}
+                    {sortedItems.length > 0 ? (
+                        sortedItems.map((item) => (
+                            <Item key={item.id} {...item} onSelect={onItemSelect} />
+                        ))
+                    ) : (
+                        <li className="text-white">No items available</li>
+                    )}
                 </ul>
             )}
         </div>
